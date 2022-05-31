@@ -2,8 +2,6 @@ import { strict as assert } from 'assert';
 import { Enum } from "../../src/kernel/Enum";
 
 describe('Enum', async () => {
-
-
     it('Enum throw error if try to use duplicated value', async () => {
         let err: Error | null = null
 
@@ -22,8 +20,6 @@ describe('Enum', async () => {
 
 
     it('compare enums', async () => {
-
-
         const cardOne = 'CARD_ONE'
         const cardTwo = 'CARD_TWO'
 

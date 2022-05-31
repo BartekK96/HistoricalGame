@@ -1,3 +1,4 @@
+import { ClassConstructor } from "./Immutable";
 import { IEqualable } from "./interfaces/IEqualable";
 
 export type SimpleValue = number | string
@@ -15,7 +16,7 @@ export class Enum<T extends SimpleValue = SimpleValue> implements IEqualable<Enu
     }
 
     public static decorate() {
-        return function classDecorator<C extends { new(...args: any[]): object }>(
+        return function classDecorator<C extends ClassConstructor<Enum, any[]>>(
             constructor: C
         ) {
             const allowedValues = new Map<SimpleValue, any>();
