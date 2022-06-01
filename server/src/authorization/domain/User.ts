@@ -10,7 +10,7 @@ export class User extends Entity {
         private id: UserID,
         private login: Login,
         private password: string,
-        private organization: string,
+        private role: string,
     ) {
         super()
     }

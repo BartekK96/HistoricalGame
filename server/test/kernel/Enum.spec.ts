@@ -3,7 +3,7 @@ import { Enum } from "../../src/kernel/Enum";
 
 describe('Enum', async () => {
     it('Enum throw error if try to use duplicated value', async () => {
-        let err: Error | null = null
+        let err: Error | null  = null
 
         try{
             @Enum.decorate()
@@ -12,7 +12,7 @@ describe('Enum', async () => {
                 public static readonly CARD_TWO = new Cards('CARD_TWO');
                 public static readonly CARD_ONE_DUPLICATE = new Cards('CARD_ONE');
             }
-        }catch(error){
+        }catch(error:any){
             err = error
         }
         assert.equal(err?.message,'Duplicate key CARD_ONE in enum Cards');
