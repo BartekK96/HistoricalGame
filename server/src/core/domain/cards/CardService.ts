@@ -1,14 +1,19 @@
 import { Injectable } from "@nestjs/common";
+import { CardFactory } from "./CardFactory";
 import { ICardRepository } from "./ICardRepository";
 
 @Injectable()
 export class CardService{
 
     constructor(
-        cardRepository:ICardRepository
+        private cardRepository:ICardRepository,
+        private cardFactory:CardFactory,
     ){}
 
-    public async createNewCard():Promise<void>{
-
+    public async createNewCard(
+        year:number,
+        event:string,
+        description:string,
+    ):Promise<void>{
     }
 }
