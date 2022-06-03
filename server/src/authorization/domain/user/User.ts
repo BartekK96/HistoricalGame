@@ -1,6 +1,6 @@
-import { DateValue } from "../../kernel/DateValue";
-import { Entity } from "../../kernel/Entity";
-import { Identifier } from "../../kernel/Identifier";
+import { DateValue } from "../../../kernel/DateValue";
+import { Entity } from "../../../kernel/Entity";
+import { Identifier } from "../../../kernel/Identifier";
 import { Login } from "./Login";
 import { Password } from "./Password";
 import { UserRole } from "./UserRole";

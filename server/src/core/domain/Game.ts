@@ -1,4 +1,4 @@
-import { UserID } from "../../authorization/domain/User";
+import { UserID } from "../../authorization/domain/user/User";
 import { DateValue } from "../../kernel/DateValue";
 import { Entity } from "../../kernel/Entity";
 import { Identifier } from "../../kernel/Identifier";

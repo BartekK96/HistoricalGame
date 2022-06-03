@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { ITimeService } from "../../core/domain/ITimeService";
+import { ITimeService } from "../../../core/domain/ITimeService";
 import { Login } from "./Login";
 import { Password } from "./Password";
 import { User, UserID } from "./User";

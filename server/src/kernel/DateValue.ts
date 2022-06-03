@@ -68,4 +68,40 @@ export class DateValue implements IEqualable<DateValue>{
     public static now(): DateValue {
         return new DateValue(new Date())
     }
+
+    public isBefore(other: DateValue): boolean {
+        if (this.isNullable() || other.isNullable()) {
+            throw new Error('Comparing nullable dates');
+        }
+        return this.toDate().getTime() < other.toDate().getTime();
+    }
+
+    public isAfter(other: DateValue): boolean {
+        return !this.equals(other) && !this.isBefore(other);
+    }
+
+    private toDate(): Date {
+        if (!this.value) {
+            throw new Error('Date value is nullable');
+        }
+
+        return new Date(this.value);
+    }
+
+    public hasAlreadyPassed(): boolean {
+        if (!this.value) {
+            throw new Error('Can not check if null date is already passed')
+        }
+        return this.value.getTime() < Date.now();
+    }
+
+    static after(milliseconds: number): DateValue {
+        const currentTs = new Date();
+        return new DateValue(new Date(currentTs.getTime() + milliseconds));
+    }
+
+
+    static before(milliseconds: number): DateValue {
+        return this.after(-milliseconds);
+    }
 }

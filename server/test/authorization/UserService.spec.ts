@@ -1,6 +1,6 @@
-describe.only('UserService',async ()=>{
+describe('UserService',async ()=>{
 
-    it.only('create user correctly',async ()=>{
+    it('create user correctly',async ()=>{
         
     })
 })

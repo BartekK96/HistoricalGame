@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { UserID } from "../../../authorization/domain/User";
+import { UserID } from "../../../authorization/domain/user/User";
 import { ITimeService } from "../ITimeService";
 import { Card, CardID } from "./Card";
 

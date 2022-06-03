@@ -37,4 +37,29 @@ describe('DateValue', async () => {
 
         assert.equal((date1.equals(date2)), false)
     })
+
+    it('isBefore return true if date is before dateValue', () => {
+        const date = new DateValue(new Date('2022-06-01T17:50:47.671Z'))
+        const dateBefore = new DateValue(new Date('2022-06-01T18:50:47.671Z'))
+        assert.ok(date.isBefore(dateBefore))
+    })
+    it('isBefore return false if date is after dateValue or equal', () => {
+        const date = new DateValue(new Date('2022-06-01T19:50:47.671Z'))
+        const dateBefore = new DateValue(new Date('2022-06-01T18:50:47.671Z'))
+       
+        assert.equal((date.equals(dateBefore)), false)
+    })
+
+    it('isAfter return true if date is after dateValue', () => {
+        const date = new DateValue(new Date('2022-06-01T19:50:47.671Z'))
+        const dateAfter = new DateValue(new Date('2022-06-01T18:50:47.671Z'))
+        assert.ok(date.isAfter(dateAfter))
+    })
+
+    it('isAfter return false if date is before dateValue or equal', () => {
+        const date = new DateValue(new Date('2022-06-01T19:50:47.671Z'))
+        const dateAfter = new DateValue(new Date('2022-06-01T20:50:47.671Z'))
+       
+        assert.equal((date.isAfter(dateAfter)), false)
+    })
 })

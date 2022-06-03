@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { CreateUserCommand } from "../application/CreateUserCommand";
+import { CreateUserCommand } from "../../application/CreateUserCommand";
 import { IUserRepository } from "./IUserRepository";
 import { UserFactory } from "./UserFactory";
 

@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { ITimeService } from "../core/domain/ITimeService";
-import { UserFactory } from "./domain/UserFactory";
-import { UserService } from "./domain/UserService";
+import { UserFactory } from "./domain/user/UserFactory";
+import { UserService } from "./domain/user/UserService";
 import { TimeService } from "./infrastructure/TimeService";
 
 @Module({

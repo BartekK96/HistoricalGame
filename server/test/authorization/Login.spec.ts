@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert';
-import { Login } from "../../src/authorization/domain/Login";
+import { Login } from '../../src/authorization/domain/user/Login';
 
 describe('Login', async () => {
 
