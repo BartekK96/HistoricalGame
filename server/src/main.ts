@@ -1,8 +1,19 @@
+import { INestApplication } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { AppModuleDev } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+
+  let app: INestApplication
+
+  if (process.env.NODE_ENV === 'testing') {
+    app = await NestFactory.create(AppModuleDev);
+  } else {
+    // todo: change when repo would be ready
+    app = await NestFactory.create(AppModuleDev);
+    // app = await NestFactory.create(AppModuleProd);
+  }
+
   await app.listen(3000);
 }
 bootstrap();

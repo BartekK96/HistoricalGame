@@ -1,8 +1,21 @@
 import { Module } from '@nestjs/common';
+import { AuthorizationModuleDev, AuthorizationModuleProd } from './authorization/AuthorizationModule';
 
 @Module({
-  imports: [],
+  imports: [
+    AuthorizationModuleProd,
+  ],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModuleProd {}
+
+
+@Module({
+  imports: [
+    AuthorizationModuleDev,
+  ],
+  controllers: [],
+  providers: [],
+})
+export class AppModuleDev {}

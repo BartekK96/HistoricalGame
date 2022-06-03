@@ -3,6 +3,7 @@ import { AccessKey, AccessKeyID } from "../../src/authorization/domain/accessKey
 import { AuthToken } from "../../src/authorization/domain/accessKey/AuthToken";
 import { UserID } from "../../src/authorization/domain/user/User";
 import { DateValue } from "../../src/kernel/DateValue";
+import { Writable } from '../../src/kernel/interfaces/Writable';
 
 describe('AccessKey', async () => {
 
@@ -29,14 +30,15 @@ describe('AccessKey', async () => {
     })
 
     it('prolong extend token expireAt and return true', () => {
-        const accessKey = new AccessKey(
+        const accessKey: Writable<AccessKey> = new AccessKey(
             AccessKeyID.create(),
             AuthToken.create(),
             DateValue.after(10),
             UserID.create(),
-        )
+        ) as Writable<AccessKey>
+
         assert.ok(accessKey.prolong())
-        assert.ok(accessKey.expiredAt.isAfter(new DateValue(new Date(DateValue.HOUR - DateValue.MINUTE))))
+        assert.ok(accessKey.getExpirationDate().isAfter(new DateValue(new Date(DateValue.HOUR - DateValue.MINUTE))))
     })
 
     it('prolong not extend token expireAt and return false', () => {
@@ -50,7 +52,7 @@ describe('AccessKey', async () => {
             UserID.create(),
         )
         assert.equal(accessKey.prolong(), false)
-        assert.ok(accessKey.expiredAt.equals(dateValueBefore))
+        assert.ok(accessKey.getExpirationDate().equals(dateValueBefore))
     })
 
     it('expire mark access token expired', () => {

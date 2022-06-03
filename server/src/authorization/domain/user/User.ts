@@ -1,3 +1,4 @@
+import { HttpException, HttpStatus } from "@nestjs/common";
 import { DateValue } from "../../../kernel/DateValue";
 import { Entity } from "../../../kernel/Entity";
 import { Identifier } from "../../../kernel/Identifier";
@@ -19,11 +20,25 @@ export class User extends Entity {
         super()
     }
 
+    public getID(): UserID {
+        return this.id;
+    }
+
+    public getLogin(): Login {
+        return this.login;
+    }
+
     public isAdmin(): boolean {
         return this.role.equals(UserRole.ADMIN)
     }
 
     public async hashPassword(): Promise<void> {
         await this.password.hashPassword()
+    }
+
+    public async assertValidPassword(password: Password): Promise<void> {
+        if (!this.password.comparePassword(password)) {
+            throw new HttpException('Wrong credencials', HttpStatus.BAD_REQUEST);
+        }
     }
 }

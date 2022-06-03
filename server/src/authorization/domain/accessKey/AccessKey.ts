@@ -9,12 +9,20 @@ export class AccessKeyID extends Identifier { }
 
 export class AccessKey extends Entity {
     constructor(
-        public id: AccessKeyID,
-        public token: AuthToken,
-        public expiredAt: DateValue,
-        public user: UserID,
+        private id: AccessKeyID,
+        private token: AuthToken,
+        private expiredAt: DateValue,
+        private user: UserID,
     ) {
         super()
+    }
+
+    public getToken(): AuthToken {
+        return this.token;
+    }
+
+    public getExpirationDate(): DateValue {
+        return this.expiredAt;
     }
 
     public isAlreadyExpired(): boolean {
