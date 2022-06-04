@@ -20,6 +20,10 @@
     "noFallthroughCasesInSwitch": false, 
     "moduleResolution": "node",
     "strict":true,
-    "noImplicitThis": true
+    "noImplicitThis": true,
+    "types": [
+      "mocha",
+      "node"
+    ]
   }
 }

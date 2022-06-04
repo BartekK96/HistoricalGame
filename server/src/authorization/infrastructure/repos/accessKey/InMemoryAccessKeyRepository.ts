@@ -22,10 +22,9 @@ export class InMemoryAccessKeyRepository implements IAccessKeyRepository {
             if (accessKey.getId().equals(newAccessKey.getId())) {
                 this.db.delete(accessKey);
                 this.db.add(newAccessKey);
-                break;
+                return;
             }
         }
-
         throw new Error('AccessKey not found');
     }
 

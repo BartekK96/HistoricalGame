@@ -7,8 +7,8 @@ import { IUserRepository } from './../user/IUserRepository';
 export class AdminGuard implements CanActivate {
 
     constructor(
-        public accessKeyRepo: IAccessKeyRepository,
-        public userRepo: IUserRepository,
+        private accessKeyRepo: IAccessKeyRepository,
+        private userRepo: IUserRepository,
     ) {
     }
 
