@@ -21,6 +21,10 @@ export class AccessKey extends Entity {
         return this.token;
     }
 
+    public getId(): AccessKeyID {
+        return this.id;
+    }
+
     public getExpirationDate(): DateValue {
         return this.expiredAt;
     }

@@ -18,6 +18,10 @@ export class Card extends Entity {
         super()
     }
 
+    public getID(): CardID {
+        return this.id;
+    }
+
     public update(
         year: number,
         event: string,

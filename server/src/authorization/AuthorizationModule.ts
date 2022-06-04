@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { ITimeService } from "../core/domain/ITimeService";
 import { AccessKeyFactor } from "./domain/accessKey/AccessKeyFactory";
 import { IAccessKeyRepository } from "./domain/accessKey/IAccessKeyRepository";
+import { UserGuard } from "./domain/guards/UserGuard";
 import { IUserRepository } from "./domain/user/IUserRepository";
 import { UserFactory } from "./domain/user/UserFactory";
 import { UserService } from "./domain/user/UserService";
@@ -10,11 +11,14 @@ import { InMemoryAccessKeyRepository } from "./infrastructure/repos/accessKey/In
 import { InMemoryUserRepository } from "./infrastructure/repos/user/InMemoryUserRepository";
 import { TimeService } from "./infrastructure/TimeService";
 
+// todo: add case with export module - export only client instead of several  classes
+
 @Module({
   imports: [],
   providers: [
     UserService,
     UserFactory,
+    UserGuard,
     AccessKeyFactor,
     {
       provide: ITimeService,
@@ -24,7 +28,13 @@ import { TimeService } from "./infrastructure/TimeService";
   controllers: [
     UserController,
   ],
-  exports: [],
+  exports: [
+    UserGuard,
+    {
+      provide: IAccessKeyRepository,
+      useClass: InMemoryAccessKeyRepository,
+    },
+  ],
 })
 export class AuthorizationModuleProd { }
 
@@ -34,6 +44,7 @@ export class AuthorizationModuleProd { }
     UserService,
     UserFactory,
     AccessKeyFactor,
+    UserGuard,
     {
       provide: ITimeService,
       useClass: TimeService,
@@ -50,6 +61,12 @@ export class AuthorizationModuleProd { }
   controllers: [
     UserController,
   ],
-  exports: [],
+  exports: [
+    UserGuard,
+    {
+      provide: IAccessKeyRepository,
+      useClass: InMemoryAccessKeyRepository,
+    },
+  ],
 })
 export class AuthorizationModuleDev { }
