@@ -1,7 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import { Immutable } from "../../../kernel/decorators/Immutable";
-
-// todo: create hash servce
+import { RawPasswod } from './RawPassword';
 
 @Immutable()
 export class Password {
@@ -10,8 +9,9 @@ export class Password {
         private password: string
     ) { }
 
-    public async hashPassword(): Promise<void> {
-        this.password = await bcrypt.hash(this.password, bcrypt.genSaltSync(10));
+    static async createHashedPassword(password: RawPasswod): Promise<Password> {
+        const hashedPassword = await bcrypt.hash(password.toString(), bcrypt.genSaltSync(10));
+        return new Password(hashedPassword);
     }
 
     public async comparePassword(password: Password): Promise<boolean> {

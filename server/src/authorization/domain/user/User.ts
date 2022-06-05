@@ -38,10 +38,6 @@ export class User extends Entity {
         return this.role.equals(UserRole.ADMIN)
     }
 
-    public async hashPassword(): Promise<void> {
-        await this.password.hashPassword()
-    }
-
     public async assertValidPassword(password: Password): Promise<void> {
         if (!this.password.comparePassword(password)) {
             throw new HttpException('Wrong credencials', HttpStatus.BAD_REQUEST);

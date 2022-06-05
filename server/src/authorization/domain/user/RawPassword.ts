@@ -1,4 +1,4 @@
-import * as bcrypt from 'bcrypt';
+import { HttpException, HttpStatus } from '@nestjs/common';
 import { Immutable } from "../../../kernel/decorators/Immutable";
 
 @Immutable()
@@ -13,11 +13,11 @@ export class RawPasswod {
 
     private assertCorrectPasswordLength(): void {
         if (this.password.length < 8) {
-            throw new Error('Password need at least 8 signs');
+            throw new HttpException('Password need at least 8 signs', HttpStatus.BAD_REQUEST);
         }
 
         if (this.password.length > 24) {
-            throw new Error('Password must contain only 24 signs');
+            throw new HttpException('Password must contain only 24 signs', HttpStatus.BAD_REQUEST);
         }
     }
 

@@ -3,7 +3,7 @@ import { CreateUserCommand } from "../../application/CreateUserCommand";
 import { LoginUserCommand } from "../../application/LoginUserCommand";
 import { IAuthSession, UserService } from "../../domain/user/UserService";
 
-@Controller()
+@Controller('/auth')
 export class UserController {
 
   constructor(

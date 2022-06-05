@@ -19,14 +19,14 @@ export class UserFactory {
         login: string,
         password: string,
     ): Promise<User> {
+        const rawPassword = new RawPasswod(password);
         const user = new User(
             UserID.create(),
             new Login(login),
-            new Password(password),
+            await Password.createHashedPassword(rawPassword),
             UserRole.USER,
             this.timeService.now()
         )
-        // await user.hashPassword()
         return user;
     }
 
@@ -34,14 +34,14 @@ export class UserFactory {
         login: string,
         password: string,
     ): Promise<User> {
+        const rawPassword = new RawPasswod(password);
         const user = new User(
             UserID.create(),
             new Login(login),
-            new Password(password),
+            await Password.createHashedPassword(rawPassword),
             UserRole.ADMIN,
             this.timeService.now()
         )
-        // await user.hashPassword()
         return user;
     }
 }

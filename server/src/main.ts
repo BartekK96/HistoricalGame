@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModuleDev } from './app.module';
 
@@ -13,6 +13,8 @@ async function bootstrap() {
     app = await NestFactory.create(AppModuleDev);
     // app = await NestFactory.create(AppModuleProd);
   }
+
+  app.useGlobalPipes(new ValidationPipe())
 
   await app.listen(3000);
 }
