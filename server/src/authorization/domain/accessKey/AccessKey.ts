@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus } from "@nestjs/common";
+import { HttpException, HttpStatus, UnauthorizedException } from "@nestjs/common";
 import { DateValue } from "../../../kernel/DateValue";
 import { Entity } from "../../../kernel/Entity";
 import { Identifier } from "../../../kernel/Identifier";
@@ -25,8 +25,18 @@ export class AccessKey extends Entity {
         return this.id;
     }
 
+    public getUserId(): AccessKeyID {
+        return this.user;
+    }
+
     public getExpirationDate(): DateValue {
         return this.expiredAt;
+    }
+
+    public assertIsAlreadyExpired():void{
+        if (this.isAlreadyExpired()) {
+            throw new UnauthorizedException('Token expired')
+        }
     }
 
     public isAlreadyExpired(): boolean {

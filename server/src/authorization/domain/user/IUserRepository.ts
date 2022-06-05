@@ -5,6 +5,6 @@ export abstract class IUserRepository {
     abstract add(user: User): Promise<void>;
 
     abstract getByID(id: UserID): Promise<User | null>;
-    
+
     abstract findByLogin(login: Login): Promise<User | null>;
 }

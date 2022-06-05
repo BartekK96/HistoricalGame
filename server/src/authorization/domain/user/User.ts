@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus } from "@nestjs/common";
+import { HttpException, HttpStatus, UnauthorizedException } from "@nestjs/common";
 import { DateValue } from "../../../kernel/DateValue";
 import { Entity } from "../../../kernel/Entity";
 import { Identifier } from "../../../kernel/Identifier";
@@ -26,6 +26,12 @@ export class User extends Entity {
 
     public getLogin(): Login {
         return this.login;
+    }
+
+    public assertIsAdmin(): void {
+        if (!this.isAdmin()) {
+            throw new UnauthorizedException('Access Forbidden');
+        }
     }
 
     public isAdmin(): boolean {

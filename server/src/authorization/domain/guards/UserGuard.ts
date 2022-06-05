@@ -1,13 +1,12 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
-import { AuthToken } from "../accessKey/AuthToken";
-import { IAccessKeyRepository } from "../accessKey/IAccessKeyRepository";
+import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
+import { AccessKeyService } from "../accessKey/AccessKeyService";
 
 @Injectable()
 export class UserGuard implements CanActivate {
 
     // todo: add decorator pattern for redis for keys on repo
     constructor(
-        private accessKeyRepo: IAccessKeyRepository,
+        private accessKeyService: AccessKeyService,
     ) { }
 
     public async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -20,22 +19,6 @@ export class UserGuard implements CanActivate {
     }
 
     private async validateToken(token: string): Promise<boolean> {
-        const accessKey = await this.accessKeyRepo.findByToken(
-            new AuthToken(token),
-        );
-
-        if (!accessKey) {
-            throw new UnauthorizedException('Access Forbidden')
-        }
-
-        if (accessKey.isAlreadyExpired()) {
-            throw new UnauthorizedException('Token expired')
-        }
-
-        accessKey.prolong()
-
-        await this.accessKeyRepo.update(accessKey)
-
-        return true
+        return this.accessKeyService.validateUserToken(token);
     }
 }

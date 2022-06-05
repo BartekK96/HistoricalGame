@@ -1,7 +1,9 @@
 import { Module } from "@nestjs/common";
 import { ITimeService } from "../core/domain/ITimeService";
 import { AccessKeyFactor } from "./domain/accessKey/AccessKeyFactory";
+import { AccessKeyService } from "./domain/accessKey/AccessKeyService";
 import { IAccessKeyRepository } from "./domain/accessKey/IAccessKeyRepository";
+import { AdminGuard } from "./domain/guards/AdminGuard";
 import { UserGuard } from "./domain/guards/UserGuard";
 import { IUserRepository } from "./domain/user/IUserRepository";
 import { UserFactory } from "./domain/user/UserFactory";
@@ -19,6 +21,8 @@ import { TimeService } from "./infrastructure/TimeService";
     UserService,
     UserFactory,
     UserGuard,
+    AdminGuard,
+    AccessKeyService,
     AccessKeyFactor,
     {
       provide: ITimeService,
@@ -30,10 +34,8 @@ import { TimeService } from "./infrastructure/TimeService";
   ],
   exports: [
     UserGuard,
-    {
-      provide: IAccessKeyRepository,
-      useClass: InMemoryAccessKeyRepository,
-    },
+    AdminGuard,
+    AccessKeyService,
   ],
 })
 export class AuthorizationModuleProd { }
@@ -45,6 +47,8 @@ export class AuthorizationModuleProd { }
     UserFactory,
     AccessKeyFactor,
     UserGuard,
+    AdminGuard,
+    AccessKeyService,
     {
       provide: ITimeService,
       useClass: TimeService,
@@ -63,10 +67,8 @@ export class AuthorizationModuleProd { }
   ],
   exports: [
     UserGuard,
-    {
-      provide: IAccessKeyRepository,
-      useClass: InMemoryAccessKeyRepository,
-    },
+    AdminGuard,
+    AccessKeyService,
   ],
 })
 export class AuthorizationModuleDev { }

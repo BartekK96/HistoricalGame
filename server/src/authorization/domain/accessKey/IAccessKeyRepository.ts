@@ -7,4 +7,6 @@ export abstract class IAccessKeyRepository {
     abstract findByToken(token: AuthToken): Promise<AccessKey | null>;
 
     abstract update(accessKey: AccessKey): Promise<void>;
+
+    abstract clear(): Promise<void>;
 }

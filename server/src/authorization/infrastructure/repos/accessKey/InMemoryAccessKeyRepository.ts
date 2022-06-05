@@ -31,6 +31,10 @@ export class InMemoryAccessKeyRepository implements IAccessKeyRepository {
     public async add(accessKey: AccessKey): Promise<void> {
         this.db.add(accessKey);
     }
+
+    public async clear(): Promise<void> {
+        this.db.clear();
+    }
 }
 
 
