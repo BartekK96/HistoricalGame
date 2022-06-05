@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert';
-import { Enum } from "../../src/kernel/Enum";
+import { Enum } from "../../src/kernel/decorators/Enum";
 
 describe('Enum', async () => {
     it('Enum throw error if try to use duplicated value', async () => {

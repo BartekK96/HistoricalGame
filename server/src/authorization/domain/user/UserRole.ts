@@ -1,4 +1,4 @@
-import { Enum } from "../../../kernel/Enum"
+import { Enum } from "../../../kernel/decorators/Enum"
 
 @Enum.decorate()
 export class UserRole extends Enum {

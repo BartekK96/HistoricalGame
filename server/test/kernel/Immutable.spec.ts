@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert';
-import { Immutable } from '../../src/kernel/Immutable';
+import { Immutable } from '../../src/kernel/decorators/Immutable';
 
 describe('Immutable', function() {
   

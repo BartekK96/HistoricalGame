@@ -1,5 +1,5 @@
 import { ClassConstructor } from "./Immutable";
-import { IEqualable } from "./interfaces/IEqualable";
+import { IEqualable } from "../interfaces/IEqualable";
 
 export type SimpleValue = number | string
 

@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
-import { Immutable } from "./Immutable";
+import { Immutable } from "./decorators/Immutable";
 import { IEqualable } from "./interfaces/IEqualable";
 
 export type ISODate = string;

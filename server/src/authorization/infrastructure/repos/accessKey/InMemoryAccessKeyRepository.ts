@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { TestOnly } from "../../../../kernel/decorators/TestOnly";
 import { AccessKey } from "../../../domain/accessKey/AccessKey";
 import { AuthToken } from "../../../domain/accessKey/AuthToken";
 import { IAccessKeyRepository } from "../../../domain/accessKey/IAccessKeyRepository";
@@ -32,6 +33,7 @@ export class InMemoryAccessKeyRepository implements IAccessKeyRepository {
         this.db.add(accessKey);
     }
 
+    @TestOnly()
     public async clear(): Promise<void> {
         this.db.clear();
     }

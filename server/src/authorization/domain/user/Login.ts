@@ -1,4 +1,4 @@
-import { Immutable } from "../../../kernel/Immutable";
+import { Immutable } from "../../../kernel/decorators/Immutable";
 
 @Immutable()
 export class Login {
