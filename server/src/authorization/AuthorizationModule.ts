@@ -9,6 +9,7 @@ import { IUserRepository } from "./domain/user/IUserRepository";
 import { UserFactory } from "./domain/user/UserFactory";
 import { UserService } from "./domain/user/UserService";
 import { UserController } from "./infrastructure/api/UserController";
+import { AuthorizationClient } from "./infrastructure/AuthorizationClient";
 import { InMemoryAccessKeyRepository } from "./infrastructure/repos/accessKey/InMemoryAccessKeyRepository";
 import { InMemoryUserRepository } from "./infrastructure/repos/user/InMemoryUserRepository";
 import { TimeService } from "./infrastructure/TimeService";
@@ -28,6 +29,7 @@ import { TimeService } from "./infrastructure/TimeService";
       provide: ITimeService,
       useClass: TimeService,
     },
+    AuthorizationClient,
   ],
   controllers: [
     UserController,
@@ -49,6 +51,7 @@ export class AuthorizationModuleProd { }
     UserGuard,
     AdminGuard,
     AccessKeyService,
+    AuthorizationClient,
     {
       provide: ITimeService,
       useClass: TimeService,

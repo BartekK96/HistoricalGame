@@ -14,7 +14,6 @@ export class CardFactory {
         yaer: number,
         event: string,
         description: string,
-        user: UserID,
     ): Card {
         return new Card(
             CardID.create(),
@@ -22,7 +21,6 @@ export class CardFactory {
             event,
             yaer,
             this.timeService.now(),
-            user
         )
     }
 }

@@ -3,7 +3,6 @@ import { AccessKey, AccessKeyID } from "../../src/authorization/domain/accessKey
 import { AuthToken } from "../../src/authorization/domain/accessKey/AuthToken";
 import { UserID } from "../../src/authorization/domain/user/User";
 import { DateValue } from "../../src/kernel/DateValue";
-import { Writable } from '../../src/kernel/interfaces/Writable';
 
 describe('AccessKey', async () => {
 
@@ -32,12 +31,12 @@ describe('AccessKey', async () => {
 
     // todo: mock time Service and use it 
     it('prolong extend token expireAt and return true', () => {
-        const accessKey: Writable<AccessKey> = new AccessKey(
+        const accessKey: AccessKey = new AccessKey(
             AccessKeyID.create(),
             AuthToken.create(),
             DateValue.after(10),
             UserID.create(),
-        ) as Writable<AccessKey>
+        )
 
         assert.ok(accessKey.prolong())
         assert.ok(accessKey.getExpirationDate().isAfter(new DateValue(new Date(DateValue.HOUR - DateValue.MINUTE))))

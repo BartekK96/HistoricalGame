@@ -13,7 +13,6 @@ export class Card extends Entity {
         private event: string,
         private year: number,
         private createdAt: DateValue,
-        private creator: UserID,
     ) {
         super()
     }
