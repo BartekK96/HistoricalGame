@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AuthorizationClient } from '../../../authorization/infrastructure/AuthorizationClient';
+import { Game, GameID } from './Game';
 import { GameFactory } from './GameFactory';
 import { IGameRepository } from './IGameRepository';
 
@@ -18,5 +19,38 @@ export class GameService {
     await this.gameRepository.add(game);
   }
 
-  public async joinGame(token: string, gameID: string): Promise<void> {}
+  public async joinGame(token: string, gameID: string): Promise<void> {
+    const game = await this.getGameById(new GameID(gameID));
+    const userID = await this.authorizationClient.resolveUserIDByToken(token);
+    game.addUser(userID);
+    await this.gameRepository.update(game);
+  }
+
+  public async leaveGame(token: string, gameID: string): Promise<void> {
+    const game = await this.getGameById(new GameID(gameID));
+    const userID = await this.authorizationClient.resolveUserIDByToken(token);
+    game.removeUser(userID);
+    await this.gameRepository.update(game);
+  }
+
+  public async startGame(token: string, gameID: string): Promise<void> {
+    const game = await this.getGameById(new GameID(gameID));
+    game.startGame();
+
+    // add algotihm for weighted radnom
+    game.chooseCards()
+
+    await this.gameRepository.update(game);
+  }
+
+
+  private async getGameById(gameID: GameID): Promise<Game> {
+    const game = await this.gameRepository.getByID(gameID);
+
+    if (!game) {
+      throw new Error('Game not found');
+    }
+
+    return game;
+  }
 }
