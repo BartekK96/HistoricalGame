@@ -1,6 +1,6 @@
 import { pipeline, Readable, Transform, TransformCallback } from 'stream';
 
-describe.only('RandomWeightAlgorith', () => {
+describe.skip('RandomWeightAlgorith', () => {
   class DummyRepo {
     public getDataFromDB(): Readable {
       const stream: Readable = new Readable();
@@ -24,7 +24,7 @@ describe.only('RandomWeightAlgorith', () => {
     _flush(callback: TransformCallback): void {}
   }
 
-  it.only('split data for several parts', async () => {
+  it('split data for several parts', async () => {
     const repo = new DummyRepo();
 
     await pipeline(repo.getDataFromDB(), new SplitStream());

@@ -25,6 +25,7 @@ import { TimeService } from "./infrastructure/TimeService";
     AdminGuard,
     AccessKeyService,
     AccessKeyFactor,
+    AuthorizationClient,
     {
       provide: ITimeService,
       useClass: TimeService,
@@ -48,6 +49,7 @@ export class AuthorizationModuleProd { }
     UserService,
     UserFactory,
     AccessKeyFactor,
+    AuthorizationClient,
     UserGuard,
     AdminGuard,
     AccessKeyService,
@@ -72,6 +74,7 @@ export class AuthorizationModuleProd { }
     UserGuard,
     AdminGuard,
     AccessKeyService,
+    AuthorizationClient,
   ],
 })
 export class AuthorizationModuleDev { }

@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { Card } from "../../domain/cards/Card";
-import { ICardRepository } from "../../domain/cards/ICardRepository";
+import { Card } from "../../../domain/cards/Card";
+import { ICardRepository } from "../../../domain/cards/ICardRepository";
 
 @Injectable()
 export class InMemoryCardRepository implements ICardRepository {
