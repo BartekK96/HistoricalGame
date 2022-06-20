@@ -35,4 +35,8 @@ export class Identifier implements IEqualable<Identifier>{
   public static create(): Identifier {
     return new Identifier(new bson.ObjectID())
   }
+
+  public toString():string{
+    return this.value.toHexString();
+  }
 }

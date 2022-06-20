@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Game, GameID } from '../../../domain/game/Game';
+import { GameName } from '../../../domain/game/GameName';
 import { IGameRepository } from '../../../domain/game/IGameRepository';
 
 @Injectable()
@@ -27,5 +28,9 @@ export class InMemoryGameRepository implements IGameRepository {
       }
     }
     throw new Error('Game not found');
+  }
+
+  public async getNotStartedByName(gameName: GameName): Promise<Game | null> {
+    throw new Error('Method not implemented.');
   }
 }
