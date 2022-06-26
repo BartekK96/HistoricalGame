@@ -1,4 +1,7 @@
 import { Module } from "@nestjs/common";
+import { MongooseModule } from "@nestjs/mongoose";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { DataSource } from "typeorm";
 import { ITimeService } from "../core/domain/ITimeService";
 import { AccessKeyFactor } from "./domain/accessKey/AccessKeyFactory";
 import { AccessKeyService } from "./domain/accessKey/AccessKeyService";
@@ -12,23 +15,37 @@ import { UserController } from "./infrastructure/api/UserController";
 import { AuthorizationClient } from "./infrastructure/AuthorizationClient";
 import { InMemoryAccessKeyRepository } from "./infrastructure/repos/accessKey/InMemoryAccessKeyRepository";
 import { InMemoryUserRepository } from "./infrastructure/repos/user/InMemoryUserRepository";
+import { MongoDbUserRepository, UserSchema } from "./infrastructure/repos/user/MongoDbUserRepository";
 import { TimeService } from "./infrastructure/TimeService";
 
-// todo: add case with export module - export only client instead of several  classes
+// todo: add case with export module - export only client instead of several classes
 
 @Module({
-  imports: [],
+  imports: [
+    MongooseModule.forFeature([
+      { name: 'User', schema: UserSchema },
+    ]),
+  ],
   providers: [
     UserService,
     UserFactory,
+    AccessKeyFactor,
+    AuthorizationClient,
     UserGuard,
     AdminGuard,
     AccessKeyService,
-    AccessKeyFactor,
     AuthorizationClient,
     {
       provide: ITimeService,
       useClass: TimeService,
+    },
+    {
+      provide: IUserRepository,
+      useClass: MongoDbUserRepository,
+    },
+    {
+      provide: IAccessKeyRepository,
+      useClass: InMemoryAccessKeyRepository,
     },
     AuthorizationClient,
   ],
@@ -39,9 +56,11 @@ import { TimeService } from "./infrastructure/TimeService";
     UserGuard,
     AdminGuard,
     AccessKeyService,
+    AuthorizationClient,
   ],
 })
-export class AuthorizationModuleProd { }
+export class AuthorizationModuleProd { 
+}
 
 @Module({
   imports: [],

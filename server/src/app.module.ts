@@ -1,11 +1,17 @@
 import { Module } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
-import { AuthorizationModuleDev, AuthorizationModuleProd } from './authorization/AuthorizationModule';
+import { MongooseModule } from '@nestjs/mongoose';
+import {
+  AuthorizationModuleDev,
+  AuthorizationModuleProd,
+} from './authorization/AuthorizationModule';
 import { CoreModuleDev, CoreModuleProd } from './core/CoreModule';
 import { HttpErrorFilter } from './kernel/HttpErrorFilter';
 
+// todo: add config file; add dns for mongo
 @Module({
   imports: [
+    MongooseModule.forRoot(`mongodb://admin:admin@172.19.0.2:27017?authSource=admin`),
     AuthorizationModuleProd,
     CoreModuleProd,
   ],
@@ -17,14 +23,10 @@ import { HttpErrorFilter } from './kernel/HttpErrorFilter';
     },
   ],
 })
-export class AppModuleProd { }
-
+export class AppModuleProd {}
 
 @Module({
-  imports: [
-    AuthorizationModuleDev,
-    CoreModuleDev,
-  ],
+  imports: [AuthorizationModuleDev, CoreModuleDev],
   controllers: [],
   providers: [
     {
@@ -33,4 +35,4 @@ export class AppModuleProd { }
     },
   ],
 })
-export class AppModuleDev { }
+export class AppModuleDev {}

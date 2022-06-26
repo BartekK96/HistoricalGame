@@ -28,9 +28,11 @@ export class UserService {
     public async register(
         command: CreateUserCommand
     ): Promise<IAuthSession> {
+        console.log('user')
+
         let user = await this.userRepository
             .findByLogin(new Login(command.login));
-
+        console.log(this.userRepository)
         if (user) {
             throw new HttpException('Login already exists', HttpStatus.BAD_REQUEST);
         }
