@@ -10,14 +10,14 @@ export class UserController {
     private userService: UserService,
   ) { }
 
-  @Post('login')
+  @Post('/login')
   public async login(
     @Body() data: LoginUserCommand
   ): Promise<IAuthSession> {
     return this.userService.login(data);
   }
 
-  @Post('register')
+  @Post('/register')
   public async register(
     @Body() data: CreateUserCommand
   ): Promise<IAuthSession> {
