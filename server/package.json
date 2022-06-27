@@ -8,7 +8,8 @@
   "scripts": {
     "copy": "cp -R ./src/client ./dist/src/client",
     "dev": "NODE_ENV=testing nest start --watch ",
-    "prod": "nest start --watch",
+    "prod": "nest start",
+    "build": "nest build",
     "test": "NODE_ENV=testing ./node_modules/.bin/mocha -r reflect-metadata -r source-map-support/register \"./dist/test/**/*.spec.js\" --watch"
   },
   "dependencies": {

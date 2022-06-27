@@ -1,9 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { Enum } from '../../src/kernel/decorators/Enum';
-import { FastRepository } from '../../src/kernel/decorators/FastRepository';
 
-describe.only('FastRepository', async () => {
+describe.skip('FastRepository', async () => {
   interface IDate {
     login: string;
     password: string;
@@ -14,7 +13,7 @@ describe.only('FastRepository', async () => {
     version: number;
   }
 
-  it.only('test', async () => {
+  it('test', async () => {
     @Enum.decorate()
     class ConnectionNames extends Enum {
       public static readonly FAST_REPO = new ConnectionNames('FAST_REPO');

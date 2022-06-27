@@ -11,7 +11,7 @@ import { HttpErrorFilter } from './kernel/HttpErrorFilter';
 // todo: add config file; add dns for mongo
 @Module({
   imports: [
-    MongooseModule.forRoot(`mongodb://admin:admin@172.19.0.2:27017?authSource=admin`),
+    MongooseModule.forRoot(`mongodb://admin:admin@mongo?authSource=admin`),
     AuthorizationModuleProd,
     CoreModuleProd,
   ],

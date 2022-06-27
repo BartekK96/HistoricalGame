@@ -32,7 +32,6 @@ socket.on('game-started', function (data) {
   console.log(data);
   console.log(11111)
 });
-voluen = 25f61f392d8f89c71978f483fc0bf0cde8bb6296b695f1c9bb213a4b27f7e5a1
 
 // event listeners
 startGameButton.addEventListener("click", (e) => {
