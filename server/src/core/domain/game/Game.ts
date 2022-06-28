@@ -116,4 +116,38 @@ export class Game extends Entity implements IBaseHandler {
   public finishGame(): void {
     throw new Error('Method not implemented.');
   }
+
+  public getPlainObject(): {
+    id: string;
+    owner: string;
+    currentPlayer: string;
+    name: string;
+    state: string;
+    participants: string[];
+    usersCards: {
+      userID: string;
+      cards: string[];
+    }[];
+    cardsPerPlayer: number;
+    startedAt: string;
+    finishedAt: string;
+  } {
+    return {
+      cardsPerPlayer: this.cardsPerPlayer,
+      currentPlayer: this.currentPlayer.toString(),
+      finishedAt: this.finishedAt.toISOString(),
+      id: this.id.toString(),
+      name: this.name.toString(),
+      owner: this.owner.toString(),
+      participants: this.participants.map(p => p.toString()),
+      startedAt: this.startedAt.toISOString(),
+      state: this.state.toString(),
+      usersCards: this.usersCards.map(u => {
+        return {
+          cards: u.cards.map(c => c.toString()),
+          userID: u.userID.toString(),
+        };
+      }),
+    };
+  }
 }

@@ -9,7 +9,6 @@ import { IGameRepository } from './IGameRepository';
 export class GameService {
   constructor(
     private gameFactory: GameFactory,
-    // todo: create microservice and export only guards and authClient
     private authorizationClient: AuthorizationClient,
     private gameRepository: IGameRepository,
   ) {}
@@ -33,12 +32,12 @@ export class GameService {
     game.removeUser(userID);
     await this.gameRepository.update(game);
   }
-
-  public async startGame(token: string, gameName: GameName): Promise<void> {
+  
+  // todo: only game owner should be able to start game
+  public async startGame(gameName: GameName): Promise<void> {
     const game = await this.getNotStartedGameByName(gameName);
+    
     game.startGame();
-
-    // add algotihm for weighted radnom
     game.chooseCards();
 
     await this.gameRepository.update(game);

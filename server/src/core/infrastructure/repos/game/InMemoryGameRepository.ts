@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { TestOnly } from '../../../../kernel/decorators/TestOnly';
 import { Game, GameID } from '../../../domain/game/Game';
 import { GameName } from '../../../domain/game/GameName';
 import { IGameRepository } from '../../../domain/game/IGameRepository';
@@ -27,10 +28,20 @@ export class InMemoryGameRepository implements IGameRepository {
         return game;
       }
     }
-    throw new Error('Game not found');
+    return null
   }
 
   public async getNotStartedByName(gameName: GameName): Promise<Game | null> {
-    throw new Error('Method not implemented.');
+    for (let game of Array.from(this.db)) {
+      if (game.name.equals(gameName) && game.startedAt) {
+        return game;
+      }
+    }
+    return null
+  }
+
+  @TestOnly()
+  public async clear(): Promise<void> {
+    this.db = new Set<Game>();
   }
 }

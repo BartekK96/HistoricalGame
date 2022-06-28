@@ -9,4 +9,6 @@ export abstract class IGameRepository {
   abstract getByID(gameID: GameID): Promise<Game | null>;
 
   abstract getNotStartedByName(gameName: GameName): Promise<Game | null>;
+  
+  abstract clear(): Promise<void>;
 }

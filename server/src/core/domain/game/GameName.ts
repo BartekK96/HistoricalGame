@@ -18,4 +18,8 @@ export class GameName {
   public toString(): string {
     return this.name;
   }
+
+  public equals(name: GameName): boolean {
+    return this.name === name.toString();
+  }
 }
