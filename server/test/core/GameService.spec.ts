@@ -20,10 +20,19 @@ describe.skip('GameService', async () => {
         UserID.create(),
         new GameName('test'),
       );
+      game.addUser(UserID.create())
+      game.addUser(UserID.create())
+      game.addUser(UserID.create())
+      
       await ctx.gameRepository.add(game);
 
       assert.equal(game.usersCards.length, 0);
       await ctx.gameService.startGame(new GameName(game.getPlainObject().name));
+
+      const gameAfterUpdate = await ctx.gameRepository.getByID(game.id);
+      assert.ok(gameAfterUpdate);
+
+      
     });
 
     it('throw error if someone try to join started game', async () => {});

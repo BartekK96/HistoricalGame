@@ -6,6 +6,9 @@ import { AdminGuard } from '../src/authorization/domain/guards/AdminGuard';
 import { UserGuard } from '../src/authorization/domain/guards/UserGuard';
 import { IUserRepository } from '../src/authorization/domain/user/IUserRepository';
 import { UserService } from '../src/authorization/domain/user/UserService';
+import { CardFactory } from '../src/core/domain/cards/CardFactory';
+import { CardService } from '../src/core/domain/cards/CardService';
+import { ICardRepository } from '../src/core/domain/cards/ICardRepository';
 import { GameFactory } from '../src/core/domain/game/GameFactory';
 import { GameService } from '../src/core/domain/game/GameService';
 import { IGameRepository } from '../src/core/domain/game/IGameRepository';
@@ -22,6 +25,9 @@ export interface ITestingContainer {
   gameService: GameService;
   gameRepository: IGameRepository;
   gameFactory: GameFactory;
+  cardService: CardService;
+  cardRepository: ICardRepository;
+  cardFactory: CardFactory;
 }
 
 export class TesUtils {
@@ -66,6 +72,19 @@ export class TesUtils {
       gameService: testingModule.get(GameService),
       gameRepository: testingModule.get(IGameRepository),
       gameFactory: testingModule.get(GameFactory),
+      cardService: testingModule.get(CardService),
+      cardRepository: testingModule.get(ICardRepository),
+      cardFactory: testingModule.get(CardFactory),
     };
+  }
+
+  public static async createDummyCards(
+    ctx: ITestingContainer,
+    count: number,
+  ): Promise<void> {
+    for (let i = 0; i < count; i++) {
+      const card = ctx.cardFactory.createCard(i, 'event', 'description');
+      await ctx.cardRepository.add(card);
+    }
   }
 }

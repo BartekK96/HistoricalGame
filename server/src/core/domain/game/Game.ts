@@ -5,6 +5,7 @@ import { Entity } from '../../../kernel/Entity';
 import { Identifier } from '../../../kernel/Identifier';
 import { Writable } from '../../../kernel/interfaces/Writable';
 import { CardID } from '../cards/Card';
+import { CardsPerPlayer } from './CardsPerPlayer';
 import { GameName } from './GameName';
 import { GameState } from './GameState';
 
@@ -12,8 +13,8 @@ interface IBaseHandler {
   addUser(userID: UserID): void;
   removeUser(userID: UserID): void;
   startGame(): void;
-  chooseCards(): void;
   finishGame(): void;
+  chooseNumberOfCardsPerPlayer(cardsPerPlayer: number): void;
 }
 
 class BaseHandler implements IBaseHandler {
@@ -27,15 +28,15 @@ class BaseHandler implements IBaseHandler {
     throw new Error('Method not implemented.');
   }
 
-  public chooseCards(): void {
-    throw new Error('Method not implemented.');
-  }
-
   public addUser(userID: UserID): void {
     throw new Error('Can not run method in given game state');
   }
 
   public finishGame(): void {
+    throw new Error('Can not run method in given game state');
+  }
+
+  public chooseNumberOfCardsPerPlayer(cardsPerPlayer: number): void {
     throw new Error('Can not run method in given game state');
   }
 }
@@ -51,7 +52,11 @@ class InitializedHandler extends BaseHandler {
   }
 
   public startGame(): void {
-    this.game.state = GameState.STARTING;
+    this.game.state = GameState.STARTED;
+  }
+
+  public chooseNumberOfCardsPerPlayer(cardsPerPlayer: number): void {
+    this.game.cardsPerPlayer = new CardsPerPlayer(cardsPerPlayer);
   }
 }
 
@@ -71,7 +76,7 @@ export class Game extends Entity implements IBaseHandler {
     public readonly state: GameState,
     public readonly participants: UserID[],
     public readonly usersCards: IUserCards[],
-    public readonly cardsPerPlayer: number,
+    public readonly cardsPerPlayer: CardsPerPlayer,
     public readonly startedAt: DateValue,
     public readonly finishedAt: DateValue,
   ) {
@@ -109,12 +114,12 @@ export class Game extends Entity implements IBaseHandler {
     this.getActualHandler().startGame();
   }
 
-  public chooseCards(): void {
+  public finishGame(): void {
     throw new Error('Method not implemented.');
   }
 
-  public finishGame(): void {
-    throw new Error('Method not implemented.');
+  public chooseNumberOfCardsPerPlayer(cardsPerPlayer: number): void {
+    this.getActualHandler().chooseNumberOfCardsPerPlayer(cardsPerPlayer);
   }
 
   public getPlainObject(): {
@@ -129,18 +134,18 @@ export class Game extends Entity implements IBaseHandler {
       cards: string[];
     }[];
     cardsPerPlayer: number;
-    startedAt: string;
-    finishedAt: string;
+    startedAt: string | null;
+    finishedAt: string | null;
   } {
     return {
-      cardsPerPlayer: this.cardsPerPlayer,
+      cardsPerPlayer: this.cardsPerPlayer.valueOf(),
       currentPlayer: this.currentPlayer.toString(),
-      finishedAt: this.finishedAt.toISOString(),
+      finishedAt: this.finishedAt.toISOStringOrNull(),
       id: this.id.toString(),
       name: this.name.toString(),
       owner: this.owner.toString(),
       participants: this.participants.map(p => p.toString()),
-      startedAt: this.startedAt.toISOString(),
+      startedAt: this.startedAt.toISOStringOrNull(),
       state: this.state.toString(),
       usersCards: this.usersCards.map(u => {
         return {

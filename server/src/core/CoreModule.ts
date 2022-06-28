@@ -14,16 +14,12 @@ import { IGameRepository } from './domain/game/IGameRepository';
 import { ITimeService } from './domain/ITimeService';
 import { CardController } from './infrastructure/api/CardController';
 import { InMemoryCardRepository } from './infrastructure/repos/card/InMemoryCardRepository';
-import { PostgresCardRepository } from './infrastructure/repos/card/PostgresCardRepository';
 import { InMemoryGameRepository } from './infrastructure/repos/game/InMemoryGameRepository';
 
 // todo : add only client for import instead of all module
 // todo: do sth with time service
 @Module({
-  imports: [
-    AuthorizationModuleProd,
-    
-  ],
+  imports: [AuthorizationModuleProd],
   providers: [
     CardService,
     CardFactory,
@@ -32,7 +28,7 @@ import { InMemoryGameRepository } from './infrastructure/repos/game/InMemoryGame
     GameServer,
     {
       provide: ICardRepository,
-      useClass: PostgresCardRepository,
+      useClass: InMemoryCardRepository,
     },
     {
       provide: ITimeService,

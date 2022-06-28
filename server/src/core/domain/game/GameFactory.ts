@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { UserID } from "../../../authorization/domain/user/User";
 import { ITimeService } from "../ITimeService";
+import { CardsPerPlayer } from "./CardsPerPlayer";
 import { Game, GameID } from "./Game";
 import { GameName } from "./GameName";
 import { GameState } from "./GameState";
@@ -24,7 +25,8 @@ export class GameFactory {
             GameState.INITIALIZED,
             [userID],
             [],
-            5,
+            // todo: move to config
+            new CardsPerPlayer(5),
             this.timeService.nullValue(),
             this.timeService.nullValue(),
         )

@@ -10,7 +10,7 @@ export class CardFactory {
         private timeService: ITimeService
     ) { }
 
-    public createCardForUser(
+    public createCard(
         yaer: number,
         event: string,
         description: string,

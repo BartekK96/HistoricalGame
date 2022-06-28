@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AuthorizationClient } from '../../../authorization/infrastructure/AuthorizationClient';
+import { CardService } from '../cards/CardService';
 import { Game, GameID } from './Game';
 import { GameFactory } from './GameFactory';
 import { GameName } from './GameName';
@@ -11,6 +12,7 @@ export class GameService {
     private gameFactory: GameFactory,
     private authorizationClient: AuthorizationClient,
     private gameRepository: IGameRepository,
+    private cardService: CardService,
   ) {}
 
   public async createNewGame(token: string, name: GameName): Promise<void> {
@@ -38,8 +40,7 @@ export class GameService {
     const game = await this.getNotStartedGameByName(gameName);
     
     game.startGame();
-    game.chooseCards();
-
+    // todo: consider if add chosing card logic to game entity
     await this.gameRepository.update(game);
   }
 
