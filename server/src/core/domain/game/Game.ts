@@ -4,7 +4,7 @@ import { ClassConstructor } from '../../../kernel/decorators/Immutable';
 import { Entity } from '../../../kernel/Entity';
 import { Identifier } from '../../../kernel/Identifier';
 import { Writable } from '../../../kernel/interfaces/Writable';
-import { CardID } from '../cards/Card';
+import { Card, CardID } from '../cards/Card';
 import { CardsPerPlayer } from './CardsPerPlayer';
 import { GameName } from './GameName';
 import { GameState } from './GameState';
@@ -12,7 +12,8 @@ import { GameState } from './GameState';
 interface IBaseHandler {
   addUser(userID: UserID): void;
   removeUser(userID: UserID): void;
-  startGame(): void;
+  startGame(): number;
+  assignCardsForPlayers(cards: Card[]): void;
   finishGame(): void;
   chooseNumberOfCardsPerPlayer(cardsPerPlayer: number): void;
 }
@@ -24,7 +25,7 @@ class BaseHandler implements IBaseHandler {
     throw new Error('Method not implemented.');
   }
 
-  public startGame(): void {
+  public startGame(): number {
     throw new Error('Method not implemented.');
   }
 
@@ -39,6 +40,10 @@ class BaseHandler implements IBaseHandler {
   public chooseNumberOfCardsPerPlayer(cardsPerPlayer: number): void {
     throw new Error('Can not run method in given game state');
   }
+
+  public assignCardsForPlayers(cards: Card[]): void {
+    throw new Error('Can not run method in given game state');
+  }
 }
 
 class InitializedHandler extends BaseHandler {
@@ -51,14 +56,29 @@ class InitializedHandler extends BaseHandler {
     this.game.participants.filter(user => !user.equals(userID));
   }
 
-  public startGame(): void {
-    this.game.state = GameState.STARTED;
+  public startGame(): number {
+    this.game.state = GameState.STARTING;
+    return this.game.getCountOfCardsInGame();
   }
 
   public chooseNumberOfCardsPerPlayer(cardsPerPlayer: number): void {
     this.game.cardsPerPlayer = new CardsPerPlayer(cardsPerPlayer);
   }
 }
+
+class StartingHandler extends BaseHandler {
+  public assignCardsForPlayers(cards: Card[]): void {
+    if (this.game.getCountOfCardsInGame() !== cards.length) {
+      throw new Error('Incorect number of cards during card assigment');
+    }
+
+    
+  }
+}
+
+class StartedHandler extends BaseHandler {}
+class FinishedHandler extends BaseHandler {}
+class CancelHandler extends BaseHandler {}
 
 export class GameID extends Identifier {}
 
@@ -83,6 +103,10 @@ export class Game extends Entity implements IBaseHandler {
     super();
   }
 
+  public getCountOfCardsInGame(): number {
+    return this.cardsPerPlayer.valueOf() * this.participants.length;
+  }
+
   public isAlreadyFinished(): boolean {
     return this.finishedAt.hasAlreadyPassed();
   }
@@ -91,7 +115,13 @@ export class Game extends Entity implements IBaseHandler {
     const stateHandlerConstructorMap: Map<
       GameState,
       ClassConstructor<BaseHandler>
-    > = new Map([[GameState.INITIALIZED, InitializedHandler]]);
+    > = new Map([
+      [GameState.INITIALIZED, InitializedHandler],
+      [GameState.STARTING, StartingHandler],
+      [GameState.STARTED, StartedHandler],
+      [GameState.CANCELED, CancelHandler],
+      [GameState.FINISHED, FinishedHandler],
+    ]);
 
     const Constructor = stateHandlerConstructorMap.get(this.state);
 
@@ -110,8 +140,12 @@ export class Game extends Entity implements IBaseHandler {
     this.getActualHandler().removeUser(userID);
   }
 
-  public startGame(): void {
-    this.getActualHandler().startGame();
+  public startGame(): number {
+    return this.getActualHandler().startGame();
+  }
+
+  public assignCardsForPlayers(cards: Card[]): void {
+    this.getActualHandler().assignCardsForPlayers(cards);
   }
 
   public finishGame(): void {

@@ -34,23 +34,25 @@ export class GameService {
     game.removeUser(userID);
     await this.gameRepository.update(game);
   }
-  
+
   // todo: only game owner should be able to start game
   public async startGame(gameName: GameName): Promise<void> {
     const game = await this.getNotStartedGameByName(gameName);
-    
-    game.startGame();
-    // todo: consider if add chosing card logic to game entity
+
+    const cardsInGame = game.startGame();
+    const cards = await this.cardService.getCardsForGame(cardsInGame);
+    game.assignCardsForPlayers(cards);
+
     await this.gameRepository.update(game);
   }
 
-  public async getNotStartedGameByName(name:GameName):Promise<Game>{
+  public async getNotStartedGameByName(name: GameName): Promise<Game> {
     const game = await this.gameRepository.getNotStartedByName(name);
-    if(!game){
+    if (!game) {
       throw new Error('Game with given name does not exists');
     }
 
-    return game
+    return game;
   }
 
   private async getGameById(gameID: GameID): Promise<Game> {
