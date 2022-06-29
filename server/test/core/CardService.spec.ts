@@ -12,13 +12,19 @@ describe('CardService', async () => {
     await ctx.cardRepository.clear();
   });
 
-  it.skip('getCardsForGame return proper amount of cards', async () => {
-    await TesUtils.createDummyCards(ctx, 10);
-
+  it('getCardsForGame return proper amount of cards', async () => {
     const numberOfCards = 10;
+    await TesUtils.createDummyCards(ctx, numberOfCards);
+
     const cards = await ctx.cardService.getCardsForGame(numberOfCards);
     assert.equal(cards.length, numberOfCards);
   });
 
-  it.skip('getCardsForGame do not retrurn duplicates', async () => {});
+  it('getCardsForGame do not retrurn duplicates', async () => {
+    const numberOfCards = 10;
+    await TesUtils.createDummyCards(ctx, numberOfCards);
+    const cards = await ctx.cardService.getCardsForGame(numberOfCards);
+    const ids = cards.map(card => card.getID().toString());
+    assert.equal(new Set(ids).size, numberOfCards);
+  });
 });

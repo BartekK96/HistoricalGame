@@ -28,6 +28,19 @@ export class InMemoryCardRepository implements ICardRepository {
   }
 
   public findRandomNumberOfCards(numberOfCards: number): Promise<Card[]> {
-    return [] as any
+    if (this.db.size < numberOfCards) {
+      throw new Error('There is not enough cards');
+    }
+    const existingCards = Array.from(this.db);
+    let lenght = existingCards.length;
+    const result = new Array(numberOfCards);
+    const taked = new Array(numberOfCards);
+
+    while (numberOfCards--) {
+      const x = Math.floor(Math.random() * lenght);
+      result[numberOfCards] = existingCards[x in taked ? taked[x] : x];
+      taked[x] = --lenght in taked ? taked[lenght] : lenght;
+    }
+    return result as any;
   }
 }
