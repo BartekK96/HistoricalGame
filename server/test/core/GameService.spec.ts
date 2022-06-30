@@ -20,10 +20,10 @@ describe.skip('GameService', async () => {
         UserID.create(),
         new GameName('test'),
       );
-      game.addUser(UserID.create())
-      game.addUser(UserID.create())
-      game.addUser(UserID.create())
-      
+      game.addUser(UserID.create());
+      game.addUser(UserID.create());
+      game.addUser(UserID.create());
+
       await ctx.gameRepository.add(game);
 
       assert.equal(game.usersCards.length, 0);
@@ -31,10 +31,13 @@ describe.skip('GameService', async () => {
 
       const gameAfterUpdate = await ctx.gameRepository.getByID(game.id);
       assert.ok(gameAfterUpdate);
-      
     });
 
     it('throw error if someone try to join started game', async () => {});
     it('throw error if game with given name does not exists', async () => {});
+  });
+
+  describe('getCurrentGameStatus', async () => {
+    it('return current player, cards in game and player cards', async () => {});
   });
 });

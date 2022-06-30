@@ -14,6 +14,8 @@ interface IBaseHandler {
   removeUser(userID: UserID): void;
   startGame(): number;
   assignCardsForPlayers(cards: Card[]): void;
+  getPlayerCards(player: UserID): Card[];
+  getCurrentPlayer(): UserID;
   finishGame(): void;
   chooseNumberOfCardsPerPlayer(cardsPerPlayer: number): void;
 }
@@ -42,6 +44,14 @@ class BaseHandler implements IBaseHandler {
   }
 
   public assignCardsForPlayers(cards: Card[]): void {
+    throw new Error('Can not run method in given game state');
+  }
+
+  public getPlayerCards(player: UserID): Card[] {
+    throw new Error('Can not run method in given game state');
+  }
+
+  public getCurrentPlayer(): UserID {
     throw new Error('Can not run method in given game state');
   }
 }
@@ -79,6 +89,8 @@ class StartingHandler extends BaseHandler {
         cards.slice(0, this.game.cardsPerPlayer.valueOf()),
       );
     });
+
+    this.game.state = GameState.STARTED;
   }
 
   private assignCardsForPlayer(userID: UserID, cards: Card[]): void {
@@ -89,7 +101,23 @@ class StartingHandler extends BaseHandler {
   }
 }
 
-class StartedHandler extends BaseHandler {}
+class StartedHandler extends BaseHandler {
+  public getPlayerCards(player: UserID): Card[] {
+    const playerCards = this.game.usersCards.find(set => {
+      return set.userID.equals(player);
+    });
+
+    if (!playerCards) {
+      throw new Error('Player has not assignment any cards in this game');
+    }
+
+    return playerCards.cards;
+  }
+
+  public getCurrentPlayer(): UserID {
+    return this.game.currentPlayer;
+  }
+}
 class FinishedHandler extends BaseHandler {}
 class CancelHandler extends BaseHandler {}
 
@@ -143,6 +171,13 @@ export class Game extends Entity implements IBaseHandler {
     }
 
     return new Constructor(this);
+  }
+
+  public getPlayerCards(player: UserID): Card[] {
+    return this.getActualHandler().getPlayerCards(player);
+  }
+  public getCurrentPlayer(): UserID {
+    return this.getActualHandler().getCurrentPlayer();
   }
 
   public addUser(userID: UserID): void {

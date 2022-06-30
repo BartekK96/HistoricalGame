@@ -8,6 +8,8 @@ todo:
 - add logic for puting cards and deal with results
 - add winner logic
 
+- add cache for started games
+
 - deal with error handling
 - customize errors
 

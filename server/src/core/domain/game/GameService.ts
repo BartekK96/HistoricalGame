@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AuthorizationClient } from '../../../authorization/infrastructure/AuthorizationClient';
+import { ICardPlainObject } from '../cards/Card';
 import { CardService } from '../cards/CardService';
 import { Game, GameID } from './Game';
 import { GameFactory } from './GameFactory';
@@ -63,5 +64,22 @@ export class GameService {
     }
 
     return game;
+  }
+
+  public async getCurrentGameStatus(
+    token: string,
+    gameName: GameName,
+  ): Promise<{
+    playerCards: ICardPlainObject[];
+    cardsInGame: ICardPlainObject[];
+    currentPlayer: string;
+  }> {
+    const user = await this.authorizationClient.resolveUserIDByToken(token);
+    const game = await this.getNotStartedGameByName(gameName);
+    return {
+      cardsInGame: [],
+      currentPlayer: game.getCurrentPlayer().toString(),
+      playerCards: game.getPlayerCards(user).map(card => card.getPlainObject()),
+    };
   }
 }

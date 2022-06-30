@@ -41,19 +41,20 @@ export class GameServer
   @SubscribeMessage('join-room')
   public async handleRoomJoin(
     client: Socket,
-    data: { room: string; gameName: string; token: string },
+    data: { room: string; token: string },
   ): Promise<void> {
-    await this.gameService.joinGame(data.token, new GameName(data.gameName));
     client.join(data.room);
+    await this.gameService.joinGame(data.token, new GameName(data.room));
     client.emit('joinedRoom', data.room);
   }
 
   @SubscribeMessage('leave-room')
   public async handleRoomLeave(
     client: Socket,
-    data: { room: string },
+    data: { room: string; token: string },
   ): Promise<void> {
     client.leave(data.room);
+    await this.gameService.leaveGame(data.token, new GameName(data.room));
     client.emit('leftRoom', data.room);
   }
 
@@ -64,9 +65,30 @@ export class GameServer
       room: string;
     },
   ): Promise<void> {
+    // await this.gameService.startGame(new GameName(message.room));
     const game = this.server
       .to(message.room)
-      .emit('game-started', { cards: 'card' });
+      .emit('game-started', { started: true });
+  }
+
+  @SubscribeMessage('get-current-set')
+  public async giveCards(
+    @MessageBody()
+    message: {
+      room: string;
+      token: string;
+    },
+  ): Promise<void> {
+    const status = await this.gameService.getCurrentGameStatus(
+      message.token,
+      new GameName(message.room),
+    );
+
+    this.server.emit('current-status', {
+      playerCards: status.playerCards,
+      cardsInGame: status.cardsInGame,
+      currentPlayer: status.currentPlayer,
+    });
   }
 
   //   @SubscribeMessage('start-game')

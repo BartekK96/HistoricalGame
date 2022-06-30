@@ -2,6 +2,14 @@ import { DateValue } from '../../../kernel/DateValue';
 import { Entity } from '../../../kernel/Entity';
 import { Identifier } from '../../../kernel/Identifier';
 
+export interface ICardPlainObject {
+  id: string;
+  description: string;
+  event: string;
+  year: number;
+  createdAt: string;
+}
+
 export class CardID extends Identifier {}
 
 export class Card extends Entity {
@@ -23,5 +31,15 @@ export class Card extends Entity {
     this.year = year;
     this.event = event;
     this.description = description;
+  }
+
+  public getPlainObject(): ICardPlainObject {
+    return {
+      createdAt: this.createdAt.toISOString(),
+      description: this.description,
+      event: this.event,
+      id: this.id.toString(),
+      year: this.year,
+    };
   }
 }
