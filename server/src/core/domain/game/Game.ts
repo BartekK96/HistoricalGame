@@ -4,7 +4,7 @@ import { ClassConstructor } from '../../../kernel/decorators/Immutable';
 import { Entity } from '../../../kernel/Entity';
 import { Identifier } from '../../../kernel/Identifier';
 import { Writable } from '../../../kernel/interfaces/Writable';
-import { Card, CardID } from '../cards/Card';
+import { Card } from '../cards/Card';
 import { CardsPerPlayer } from './CardsPerPlayer';
 import { GameName } from './GameName';
 import { GameState } from './GameState';
@@ -49,8 +49,9 @@ class BaseHandler implements IBaseHandler {
 class InitializedHandler extends BaseHandler {
   public addUser(userID: UserID): void {
     // todo: customize it in future
-    if (this.game.participants.length === 4)
+    if (this.game.participants.length < 4) {
       this.game.participants.push(userID);
+    }
   }
   public removeUser(userID: UserID): void {
     this.game.participants.filter(user => !user.equals(userID));
@@ -72,7 +73,19 @@ class StartingHandler extends BaseHandler {
       throw new Error('Incorect number of cards during card assigment');
     }
 
-    
+    this.game.participants.map(participant => {
+      this.assignCardsForPlayer(
+        participant,
+        cards.slice(0, this.game.cardsPerPlayer.valueOf()),
+      );
+    });
+  }
+
+  private assignCardsForPlayer(userID: UserID, cards: Card[]): void {
+    this.game.usersCards.push({
+      cards,
+      userID,
+    });
   }
 }
 
@@ -84,7 +97,7 @@ export class GameID extends Identifier {}
 
 export interface IUserCards {
   userID: UserID;
-  cards: CardID[];
+  cards: Card[];
 }
 
 export class Game extends Entity implements IBaseHandler {

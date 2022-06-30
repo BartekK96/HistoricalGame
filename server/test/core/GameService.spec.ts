@@ -31,7 +31,6 @@ describe.skip('GameService', async () => {
 
       const gameAfterUpdate = await ctx.gameRepository.getByID(game.id);
       assert.ok(gameAfterUpdate);
-
       
     });
 

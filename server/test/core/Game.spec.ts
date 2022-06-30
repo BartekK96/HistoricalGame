@@ -3,7 +3,7 @@ import { UserID } from '../../src/authorization/domain/user/User';
 import { GameName } from '../../src/core/domain/game/GameName';
 import { ITestingContainer, TesUtils } from '../TestUtils';
 
-describe.skip('Game', async () => {
+describe('Game', async () => {
   let ctx: ITestingContainer;
 
   before(async () => {
@@ -16,7 +16,30 @@ describe.skip('Game', async () => {
   });
 
   describe('assignCardsForPlayers', async () => {
-    it('split cards to participants', async () => {});
+    it('split cards to participants', async () => {
+      const game = ctx.gameFactory.createGame(
+        UserID.create(),
+        new GameName('dummy'),
+      );
+
+      game.addUser(UserID.create());
+      game.addUser(UserID.create());
+
+      assert.equal(game.participants.length, 3);
+
+      game.chooseNumberOfCardsPerPlayer(2);
+
+      const numberOfCards = game.startGame();
+      await TesUtils.createDummyCards(ctx, numberOfCards);
+      const cards = await ctx.cardService.getCardsForGame(numberOfCards);
+      game.assignCardsForPlayers(cards);
+
+      assert.equal(game.usersCards.length, game.participants.length);
+      for (let cards of game.usersCards) {
+        assert.equal(cards.cards.length, game.cardsPerPlayer.valueOf());
+      }
+    });
+
     it('throw error if number of given cards is less than needed card count for game', async () => {
       await TesUtils.createDummyCards(ctx, 3);
 
@@ -28,15 +51,17 @@ describe.skip('Game', async () => {
       game.addUser(UserID.create());
       game.addUser(UserID.create());
 
-     const cardsCount =  game.startGame();
-      
-    
+      game.startGame();
 
-    //     assert.throws(
-    //     () => {
-    //       game.assignCardsForPlayers(new Array(cardsCount));
-    //     },
-    //   );
+      await assert.rejects(
+        async () => {
+          game.assignCardsForPlayers(new Array(3));
+        },
+        {
+          name: 'Error',
+          message: 'Incorect number of cards during card assigment',
+        },
+      );
     });
   });
 });
