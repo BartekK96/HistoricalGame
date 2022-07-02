@@ -32,7 +32,7 @@ class BaseHandler implements IBaseHandler {
   }
 
   public addUser(userID: UserID): void {
-    throw new Error('Can not run method in given game state');
+    throw new Error('Game is already started');
   }
 
   public finishGame(): void {

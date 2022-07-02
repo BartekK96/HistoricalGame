@@ -16,7 +16,7 @@ export class InMemoryGameRepository implements IGameRepository {
       if (game.id.equals(newGame.id)) {
         this.db.delete(game);
         this.db.add(newGame);
-        break;
+        return;
       }
     }
 

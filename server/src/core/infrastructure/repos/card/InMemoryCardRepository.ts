@@ -15,7 +15,7 @@ export class InMemoryCardRepository implements ICardRepository {
       if (card.getID().equals(newCard.getID())) {
         this.db.delete(card);
         this.db.add(newCard);
-        break;
+        return;
       }
     }
 
