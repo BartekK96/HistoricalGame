@@ -59,15 +59,9 @@ export class GameServer
   }
 
 
+
   // owner start game APP -> server
   // server inform game is started server -> broadcast APP
-  // each player get game status APP -> server
-  // server response to each player with game status server -> APP
-  // current player put a card APP -> server
-  // server validate card status/game status -> server broadcast status updated -> APP
-  // each player get game status(game finished or current player is changed) -> APP -> server
-
-
   @SubscribeMessage('start-game')
   public async startGame(
     @MessageBody()
@@ -75,14 +69,16 @@ export class GameServer
       room: string;
     },
   ): Promise<void> {
-    // await this.gameService.startGame(new GameName(message.room));
-    const game = this.server
+    await this.gameService.startGame(new GameName(message.room));
+    this.server
       .to(message.room)
       .emit('game-started', { started: true });
   }
 
+   // each player get game status APP -> server
+  // server response to each player with game status server -> APP 
   @SubscribeMessage('get-current-set')
-  public async giveCards(
+  public async getCurrentGameStatus(
     @MessageBody()
     message: {
       room: string;
@@ -100,6 +96,36 @@ export class GameServer
       currentPlayer: status.currentPlayer,
     });
   }
+
+  
+  // current player put a card APP -> server
+  // server validate card status/game status -> server broadcast status updated -> APP
+
+  @SubscribeMessage('put-card')
+  public async putCard(
+    @MessageBody()
+    message: {
+      room: string;
+      token: string;
+    },
+  ): Promise<void> {
+    await this.gameService.placeCard(
+      message.token,
+      new GameName(message.room),
+    );
+
+    this.server
+      .to(message.room)
+      .emit('card-placed', { newCard: true });
+  }
+
+  // each player get game status(game finished or current player is changed) -> APP -> server
+  // getCurrentGameStatus
+
+
+
+
+
 
   //   @SubscribeMessage('start-game')
   //   public async startGame(

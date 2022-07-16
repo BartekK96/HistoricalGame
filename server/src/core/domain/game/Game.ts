@@ -15,6 +15,7 @@ interface IBaseHandler {
   startGame(): number;
   assignCardsForPlayers(cards: Card[]): void;
   getPlayerCards(player: UserID): Card[];
+  putCard(player: UserID, card: Card): void;
   getCurrentPlayer(): UserID;
   finishGame(): void;
   chooseNumberOfCardsPerPlayer(cardsPerPlayer: number): void;
@@ -22,6 +23,10 @@ interface IBaseHandler {
 
 class BaseHandler implements IBaseHandler {
   constructor(protected game: Writable<Game>) {}
+
+  public putCard(player: UserID, card: Card): void {
+    throw new Error('Method not implemented.');
+  }
 
   public removeUser(userID: UserID): void {
     throw new Error('Method not implemented.');
@@ -117,6 +122,10 @@ class StartedHandler extends BaseHandler {
   public getCurrentPlayer(): UserID {
     return this.game.currentPlayer;
   }
+
+  public putCard(player: UserID, card: Card): void {
+    
+  }
 }
 class FinishedHandler extends BaseHandler {}
 class CancelHandler extends BaseHandler {}
@@ -171,6 +180,10 @@ export class Game extends Entity implements IBaseHandler {
     }
 
     return new Constructor(this);
+  }
+
+  public putCard(player: UserID, card: Card): void {
+    this.getActualHandler().putCard(player, card);
   }
 
   public getPlayerCards(player: UserID): Card[] {

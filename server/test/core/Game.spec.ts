@@ -64,4 +64,10 @@ describe('Game', async () => {
       );
     });
   });
+
+  describe.skip('putCard', async () => {
+    it('throw error if game is not started', async () => {});
+    it('throw error if current player in game try to put card', async () => {});
+    it('throw error if given card does not belong to user', async () => {});
+  });
 });

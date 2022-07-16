@@ -36,6 +36,12 @@ export class GameService {
     await this.gameRepository.update(game);
   }
 
+  public async placeCard(token: string, gameName: GameName): Promise<void> {
+    const userID = await this.authorizationClient.resolveUserIDByToken(token);
+    const game = await this.getGameByName(gameName);
+
+  }
+
   // todo: only game owner should be able to start game
   public async startGame(gameName: GameName): Promise<void> {
     const game = await this.getNotStartedGameByName(gameName);
@@ -45,6 +51,15 @@ export class GameService {
     game.assignCardsForPlayers(cards);
 
     await this.gameRepository.update(game);
+  }
+
+  private async getGameByName(gameName: GameName): Promise<Game> {
+    const game = await this.gameRepository.getByName(gameName);
+    if (!game) {
+      throw new Error('Game with given name does not exists');
+    }
+
+    return game;
   }
 
   public async getNotStartedGameByName(name: GameName): Promise<Game> {

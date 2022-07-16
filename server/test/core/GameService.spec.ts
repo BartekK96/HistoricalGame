@@ -70,18 +70,26 @@ describe('GameService', async () => {
 
       await assert.rejects(
         async () => {
-          await ctx.gameService.joinGame('valid token', new GameName('not existing'));
+          await ctx.gameService.joinGame(
+            'valid token',
+            new GameName('not existing'),
+          );
         },
         {
           name: 'Error',
-          message:'Game with given name does not exists',
+          message: 'Game with given name does not exists',
         },
       );
     });
   });
 
   describe.skip('getCurrentGameStatus', async () => {
-    it('return current player, cards in game and player cards', async () => {
-    });
+    it('return current player, cards in game and player cards', async () => {});
+  });
+
+  describe.skip('placeCard', async () => {
+    it('throw error if game does not exists', async () => {});
+    it('throw error if game is not started', async () => {});
+    it('throw error if current player in game try to put card', async () => {});
   });
 });

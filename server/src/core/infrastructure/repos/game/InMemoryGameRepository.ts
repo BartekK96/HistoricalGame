@@ -28,7 +28,7 @@ export class InMemoryGameRepository implements IGameRepository {
         return game;
       }
     }
-    return null
+    return null;
   }
 
   public async getNotStartedByName(gameName: GameName): Promise<Game | null> {
@@ -37,11 +37,20 @@ export class InMemoryGameRepository implements IGameRepository {
         return game;
       }
     }
-    return null
+    return null;
   }
 
   @TestOnly()
   public async clear(): Promise<void> {
     this.db = new Set<Game>();
+  }
+
+  public async getByName(gameName: GameName): Promise<Game | null> {
+    for (let game of Array.from(this.db)) {
+      if (game.name.equals(gameName)) {
+        return game;
+      }
+    }
+    return null;
   }
 }
