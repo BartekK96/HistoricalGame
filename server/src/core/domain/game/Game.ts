@@ -4,7 +4,7 @@ import { ClassConstructor } from '../../../kernel/decorators/Immutable';
 import { Entity } from '../../../kernel/Entity';
 import { Identifier } from '../../../kernel/Identifier';
 import { Writable } from '../../../kernel/interfaces/Writable';
-import { Card } from '../cards/Card';
+import { Card, CardID } from '../cards/Card';
 import { CardsPerPlayer } from './CardsPerPlayer';
 import { GameName } from './GameName';
 import { GameState } from './GameState';
@@ -15,7 +15,7 @@ interface IBaseHandler {
   startGame(): number;
   assignCardsForPlayers(cards: Card[]): void;
   getPlayerCards(player: UserID): Card[];
-  putCard(player: UserID, card: Card): void;
+  putCard(player: UserID, card: Card): boolean;
   getCurrentPlayer(): UserID;
   finishGame(): void;
   chooseNumberOfCardsPerPlayer(cardsPerPlayer: number): void;
@@ -24,7 +24,7 @@ interface IBaseHandler {
 class BaseHandler implements IBaseHandler {
   constructor(protected game: Writable<Game>) {}
 
-  public putCard(player: UserID, card: Card): void {
+  public putCard(player: UserID, card: Card): boolean {
     throw new Error('Method not implemented.');
   }
 
@@ -91,7 +91,7 @@ class StartingHandler extends BaseHandler {
     this.game.participants.map(participant => {
       this.assignCardsForPlayer(
         participant,
-        cards.slice(0, this.game.cardsPerPlayer.valueOf()),
+        cards.splice(0, this.game.cardsPerPlayer.valueOf()),
       );
     });
 
@@ -123,8 +123,34 @@ class StartedHandler extends BaseHandler {
     return this.game.currentPlayer;
   }
 
-  public putCard(player: UserID, card: Card): void {
-    
+  public putCard(player: UserID, card: Card): boolean {
+    this.assertGameIsSatrted();
+    this.assertIsCurrentPlayerTurn(player);
+    this.assertCardBelongToUser(player, card.getID());
+
+    // this.game
+
+    return false
+  }
+
+  private assertGameIsSatrted(): void {
+    if (!this.game.state.equals(GameState.STARTED)) {
+      throw new Error('Game is not in start mode');
+    }
+  }
+
+  private assertIsCurrentPlayerTurn(player: UserID): void {
+    if (!this.getCurrentPlayer().equals(player)) {
+      throw new Error('There is no your turn');
+    }
+  }
+
+  private assertCardBelongToUser(player: UserID, card: CardID): void {
+    const userCards = this.getPlayerCards(player);
+    const finded = userCards.find(userCard => userCard.getID().equals(card));
+    if (!finded) {
+      throw new Error('Player does not have this card');
+    }
   }
 }
 class FinishedHandler extends BaseHandler {}
@@ -182,8 +208,8 @@ export class Game extends Entity implements IBaseHandler {
     return new Constructor(this);
   }
 
-  public putCard(player: UserID, card: Card): void {
-    this.getActualHandler().putCard(player, card);
+  public putCard(player: UserID, card: Card): boolean {
+    return this.getActualHandler().putCard(player, card);
   }
 
   public getPlayerCards(player: UserID): Card[] {
